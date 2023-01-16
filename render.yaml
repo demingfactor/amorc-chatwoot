@@ -1,8 +1,7 @@
 databases:
   - name: amorc_chatwoot_production
     region: singapore
-    ipAllowList: [202.174.41.43] # only allow internal connections
-
+ 
 services:
   - type: web
     name: amorc-chatwoot
@@ -26,7 +25,7 @@ services:
 
   - type: redis
     name: amorc-chatwoot_redis
-    plan: free
+    plan: starter
     region: singapore
     ipAllowList: [] # only allow internal connections
     maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
