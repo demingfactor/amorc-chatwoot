@@ -1,0 +1,47 @@
+databases:
+  - name: amorc_chatwoot_production
+    region: singapore
+    ipAllowList: [202.174.41.43] # only allow internal connections
+
+services:
+  - type: web
+    name: amorc-chatwoot
+    env: ruby
+    plan: starter
+    repo: https://github.com/demingfactor/amorc-chatwoot
+    region: singapore
+    buildCommand: bundle install && bundle exec rails db:chatwoot_prepare && bundle exec rails assets:precompile
+    startCommand: bundle exec rails server
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: amorc_chatwoot_production
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: amorc-chatwoot_redis
+          property: connectionString
+      - fromGroup: amorc-chatwoot_env
+
+  - type: redis
+    name: amorc-chatwoot_redis
+    plan: free
+    region: singapore
+    ipAllowList: [] # only allow internal connections
+    maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
+
+  - type: worker
+    name: amorc-chatwoot_sidekiq-worker
+    plan: starter
+    env: ruby
+    region: singapore
+    buildCommand: bundle install
+    startCommand: bundle exec sidekiq
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: amorc-chatwoot_redis
+          property: connectionString
+      - fromGroup: amorc-chatwoot_env
