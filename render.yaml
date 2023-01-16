@@ -25,7 +25,7 @@ services:
 
   - type: redis
     name: amorc-chatwoot_redis
-    plan: free
+    plan: starter
     region: singapore
     ipAllowList: [] # only allow internal connections
     maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
