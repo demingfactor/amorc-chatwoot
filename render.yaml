@@ -1,8 +1,7 @@
 databases:
   - name: amorc_chatwoot_production
     region: singapore
-    ipAllowList: [202.174.41.43] # only allow internal connections
-
+ 
 services:
   - type: web
     name: amorc-chatwoot
