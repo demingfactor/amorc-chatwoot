@@ -760,6 +760,7 @@ DEPENDENCIES
   liquid
   listen
   maxminddb
+  mini_magick
   mock_redis
   newrelic_rpm
   pg

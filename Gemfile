@@ -66,6 +66,7 @@ gem 'devise-secure_password', '~> 2.0', git: 'https://github.com/chatwoot/devise
 gem 'devise_token_auth'
 gem 'rotp'
 gem 'rqrcode'
+gem 'mini_magick'
 # authorization
 gem 'jwt'
 gem 'pundit'
