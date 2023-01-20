@@ -11,6 +11,8 @@ class DeviseOverrides::SessionsController < ::DeviseTokenAuth::SessionsControlle
       yield @resource if block_given?
       render_create_success
     else
+      return render_create_error_wrong_otp unless passes_otp_check?
+
       super
     end
   end
@@ -35,5 +37,17 @@ class DeviseOverrides::SessionsController < ::DeviseTokenAuth::SessionsControlle
 
     user = User.find_by(email: params[:email])
     @resource = user if user&.valid_sso_auth_token?(params[:sso_auth_token])
+  end
+
+  def passes_otp_check?
+    user = User.find_by(email: params[:email])
+    return true unless user&.otp_required_for_login?
+    return false unless params[:otp_attempt].instance_of?(String)
+
+    user.verify_otp!(params[:otp_attempt])
+  end
+
+  def render_create_error_wrong_otp
+    render_error(401, I18n.t('errors.signup.incorrect_otp'))
   end
 end

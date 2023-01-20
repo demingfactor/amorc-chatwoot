@@ -26,16 +26,36 @@
                 @input="$v.credentials.email.$touch"
               />
             </label>
-            <label :class="{ error: $v.credentials.password.$error }">
-              {{ $t('LOGIN.PASSWORD.LABEL') }}
-              <input
-                v-model.trim="credentials.password"
-                type="password"
-                data-testid="password_input"
-                :placeholder="$t('LOGIN.PASSWORD.PLACEHOLDER')"
-                @input="$v.credentials.password.$touch"
-              />
-            </label>
+            <div class="password-row">
+              <label
+                :class="{
+                  error: $v.credentials.password.$error,
+                  'password-input': true,
+                }"
+              >
+                {{ $t('LOGIN.PASSWORD.LABEL') }}
+                <input
+                  v-model.trim="credentials.password"
+                  class="m-0"
+                  type="password"
+                  data-testid="password_input"
+                  :placeholder="$t('LOGIN.PASSWORD.PLACEHOLDER')"
+                  @input="$v.credentials.password.$touch"
+                />
+              </label>
+              <label :class="{ 'otp-input': true }">
+                {{ $t('LOGIN.OTP.LABEL') }}
+                <input
+                  v-model.trim="credentials.otp_attempt"
+                  class="m-0"
+                  type="text"
+                  autocomplete="one-time-code"
+                  data-testid="otp_attempt_input"
+                  :placeholder="$t('LOGIN.OTP.PLACEHOLDER')"
+                />
+              </label>
+              <p class="text-muted">{{ $t('LOGIN.OTP.INFO') }}</p>
+            </div>
             <woot-submit-button
               :disabled="
                 $v.credentials.email.$invalid ||
@@ -137,6 +157,7 @@ export default {
           ? decodeURIComponent(this.email)
           : this.credentials.email,
         password: this.credentials.password,
+        otp_attempt: this.credentials.otp_attempt,
         sso_auth_token: this.ssoAuthToken,
         ssoAccountId: this.ssoAccountId,
         ssoConversationId: this.ssoConversationId,
@@ -172,3 +193,23 @@ export default {
   },
 };
 </script>
+<style>
+.password-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+.password-input {
+  flex-grow: 1;
+}
+.otp-input {
+  flex-basis: 6rem;
+  flex-grow: 1;
+  white-space: nowrap;
+}
+.m-0 {
+  margin: 0px;
+}
+</style>

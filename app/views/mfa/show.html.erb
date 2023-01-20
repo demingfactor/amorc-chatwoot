@@ -1,0 +1,9 @@
+<div id="main" class="flex flex-col items-center justify-center">
+  <div class="p-4">
+    <div class="flex flex-col justify-center modal gap-2">
+      <h3><%= t("mfa.edit.title")%></h3>
+      <% partial = (current_user.otp_required_for_login ? "disable" : "enable") %>
+      <%= render partial: partial %>
+    </div>
+  </div>
+</div>

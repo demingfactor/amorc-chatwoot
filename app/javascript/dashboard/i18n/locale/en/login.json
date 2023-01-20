@@ -9,6 +9,11 @@
       "LABEL": "Password",
       "PLACEHOLDER": "Password"
     },
+    "OTP": {
+      "LABEL": "One-Time Password",
+      "PLACEHOLDER": "123456",
+      "INFO": "Leave One-Time Password blank if you do not have it enabled."
+    },
     "API": {
       "SUCCESS_MESSAGE": "Login Successful",
       "ERROR_MESSAGE": "Could not connect to Woot Server, Please try again later",

@@ -8,11 +8,23 @@ Rails.application.routes.draw do
     token_validations: 'devise_overrides/token_validations'
   }, via: [:get, :post]
 
+  devise_scope :user do
+    get 'auth/otp', to: 'devise_overrides/sessions#otp'
+    get 'auth/login', to: 'devise_overrides/sessions#login'
+  end
+
   ## renders the frontend paths only if its not an api only server
   if ActiveModel::Type::Boolean.new.cast(ENV.fetch('CW_API_ONLY_SERVER', false))
     root to: 'api#index'
   else
     root to: 'dashboard#index'
+
+    resources :accounts, path: 'app/accounts' do
+      resource :mfa, controller: :mfa do
+        get 'codes', to: 'mfa#codes'
+        get 'verify', to: 'mfa#verify'
+      end
+    end
 
     get '/app', to: 'dashboard#index'
     get '/app/*params', to: 'dashboard#index'

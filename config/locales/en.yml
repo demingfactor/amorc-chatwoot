@@ -45,6 +45,7 @@ en:
       invalid_email: You have entered an invalid email
       email_already_exists: "You have already signed up for an account with %{email}"
       failed: Signup failed
+      incorrect_otp: The given One-Time Password was incorrect
     data_import:
       data_type:
         invalid: Invalid data type
@@ -179,3 +180,16 @@ en:
       results_title: Search results
     hero:
       sub_title: Search for the articles here or browse the categories below.
+
+  mfa:
+    edit:
+      title: Configure Multi-Factor Authentication
+      back: Back to Settings
+      enabled:
+        status: Multi-factor authentication is enabled for this account.
+        info: Your account is protected by Multi-Factor Authentication, and you will be asked to provide a one-time password upon login.
+        action: Disable Multi-Factor Authentication
+      disabled:
+        status: Multi-factor authentication is currently not enabled.
+        info: Enable Multi-Factor Authentication to improve the security of your account. You will need a TOTP compatible one-time password generator, such as Authy.
+        action: Enable Multi-Factor Authentication

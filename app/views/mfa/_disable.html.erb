@@ -1,0 +1,10 @@
+<div class="max-w-4xl">
+  <p><%= t("mfa.edit.enabled.status") %></p>
+
+  <p><%= t("mfa.edit.enabled.info") %></p>
+</div>
+
+<div class="flex flex-col-reverse xs:flex-row items-center justify-between gap-2 pt-4">
+  <%= link_to t("mfa.edit.back"), "/app/accounts/#{params[:account_id]}/profile/settings", class: "button clear primary" %>
+  <%= button_to t("mfa.edit.enabled.action"), account_mfa_path(id: @account_id), method: :delete, class: "button alert" %>
+</div>

@@ -7,6 +7,7 @@
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string
 #  confirmed_at           :datetime
+#  consumed_timestep      :integer
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string
 #  custom_attributes      :jsonb
@@ -17,6 +18,9 @@
 #  last_sign_in_ip        :string
 #  message_signature      :text
 #  name                   :string           not null
+#  otp_backup_codes       :text             is an Array
+#  otp_required_for_login :boolean
+#  otp_secret             :string
 #  provider               :string           default("email"), not null
 #  pubsub_token           :string
 #  remember_created_at    :datetime
@@ -48,14 +52,10 @@ class User < ApplicationRecord
   include Rails.application.routes.url_helpers
   include Reportable
   include SsoAuthenticatable
+  include MultiFactorAuthenticatable
 
-  devise :database_authenticatable,
-         :registerable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :validatable,
-         :confirmable,
+  devise :database_authenticatable, :registerable, :recoverable,
+         :rememberable, :trackable, :validatable, :confirmable,
          :password_has_required_content
 
   # TODO: remove in a future version once online status is moved to account users

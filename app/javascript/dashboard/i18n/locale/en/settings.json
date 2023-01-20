@@ -49,7 +49,8 @@
       "PASSWORD_SECTION": {
         "TITLE": "Password",
         "NOTE": "Updating your password would reset your logins in multiple devices.",
-        "BTN_TEXT": "Change password"
+        "BTN_TEXT": "Change password",
+        "MFA": "Configure Multi-Factor Authentication"
       },
       "ACCESS_TOKEN": {
         "TITLE": "Access Token",

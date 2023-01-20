@@ -1,0 +1,25 @@
+<div id="main" class="flex flex-col items-center justify-center">
+  <div class="p-4">
+    <div class="flex flex-col justify-center modal gap-2">
+      <h3>Backup these codes</h3>
+      <div class="max-w-4xl">
+        <p>
+          If you lose access to your one-time passwords, these codes will provide
+          a single use login each. Print them out, or write them down, and store
+          them somewhere safe and secure.
+        </p>
+        <div class="flex items-center justify-center">
+          <div class="flex flex-wrap justify-center gap-2 p-4 max-w-2xl">
+            <% current_user.otp_backup_codes.each do |code| %>
+              <code><%= code %></code>
+            <% end %>
+          </div>
+        </div>
+        <div class="flex flex-col-reverse xs:flex-row items-center justify-between gap-2 pt-4">
+          <%= link_to "Cancel", account_mfa_path(account_id: @account_id), class: "button clear primary" %>
+          <%= link_to "Continue", verify_account_mfa_path(account_id: @account_id), class: "button primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -63,6 +63,9 @@
         >
           {{ $t('PROFILE_SETTINGS.FORM.PASSWORD_SECTION.BTN_TEXT') }}
         </woot-button>
+        <a :href="`/app/accounts/${accountId}/mfa`" class="mfa">{{
+          $t('PROFILE_SETTINGS.FORM.PASSWORD_SECTION.MFA')
+        }}</a>
       </div>
     </div>
   </form>
@@ -105,6 +108,7 @@ export default {
     ...mapGetters({
       currentUser: 'getCurrentUser',
       currentUserId: 'getCurrentUserID',
+      accountId: 'getCurrentAccountId',
     }),
   },
   methods: {
@@ -148,5 +152,10 @@ export default {
   .small-9 {
     padding: var(--space-normal);
   }
+}
+
+.mfa {
+  display: block;
+  padding-top: 1rem;
 }
 </style>
