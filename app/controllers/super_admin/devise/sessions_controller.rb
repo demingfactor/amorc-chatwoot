@@ -24,10 +24,22 @@ class SuperAdmin::Devise::SessionsController < Devise::SessionsController
   def valid_credentials?
     @super_admin = SuperAdmin.find_by!(email: params[:super_admin][:email])
     raise StandardError, 'Invalid Password' unless @super_admin.valid_password?(params[:super_admin][:password])
+    raise StandardError, 'Invalid OTP' unless passes_otp_check?
 
     true
   rescue StandardError => e
     @error_message = e.message
     false
+  end
+
+  def passes_otp_check?
+    return true unless @super_admin&.otp_required_for_login?
+    return false unless params[:super_admin][:otp_attempt].instance_of?(String)
+
+    @super_admin.verify_otp!(params[:super_admin][:otp_attempt])
+  end
+
+  def render_create_error_wrong_otp
+    render_error(401, I18n.t('errors.signup.incorrect_otp'))
   end
 end

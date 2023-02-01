@@ -24,10 +24,17 @@
                   Email
                   <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email eg: someone@example.com" %>
                 </label>
-                <label>
-                  Password
-                  <%= f.password_field :password, autocomplete: "current-password",  placeholder: "Password" %>
-                </label>
+                <div class="password-row">
+                  <label class="password-input m-0">
+                    Password
+                    <%= f.password_field :password, autocomplete: "current-password",  placeholder: "Password", class: "m-0" %>
+                  </label>
+                  <label class="otp-input">
+                    One-Time Password
+                    <%= f.password_field :otp_attempt, autocomplete: "one-time-code",  placeholder: "123456", class: "m-0" %>
+                  </label>
+                  <p class="text-muted">Leave One-Time Password blank if you do not have it enabled.</p>
+                </div>
                 <p>
                   <%= f.check_box :remember_me %> Remember me
                 </p>
@@ -44,3 +51,23 @@
     </div>
   </body>
 </html>
+<style>
+  .password-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+  .password-input {
+    flex-grow: 1;
+  }
+  .otp-input {
+    flex-basis: 6rem;
+    flex-grow: 1;
+    white-space: nowrap;
+  }
+  .m-0 {
+    margin: 0px;
+  }
+</style>
