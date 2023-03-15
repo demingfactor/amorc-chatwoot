@@ -3,3 +3,4 @@
 //= link administrate/application.js
 //= link dashboardChart.js
 //= link mfa.css
+//= link secretField.js

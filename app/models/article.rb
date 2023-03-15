@@ -6,6 +6,7 @@
 #  content               :text
 #  description           :text
 #  meta                  :jsonb
+#  position              :integer
 #  slug                  :string           not null
 #  status                :integer
 #  title                 :string
@@ -104,6 +105,12 @@ class Article < ApplicationRecord
 
   def draft!
     update(status: :draft)
+  end
+
+  def increment_view_count
+    # rubocop:disable Rails/SkipsModelValidations
+    update_column(:views, views? ? views + 1 : 1)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 
   private

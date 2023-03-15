@@ -1,6 +1,6 @@
 <template>
-  <div class="medium-12 column login">
-    <div class="text-center medium-12 login__hero align-self-top">
+  <main class="medium-12 column login">
+    <section class="text-center medium-12 login__hero align-self-top">
       <img
         :src="globalConfig.logo"
         :alt="globalConfig.installationName"
@@ -11,11 +11,16 @@
           useInstallationName($t('LOGIN.TITLE'), globalConfig.installationName)
         }}
       </h2>
-    </div>
-    <div class="row align-center">
+    </section>
+    <section class="row align-center">
       <div v-if="!email" class="small-12 medium-4 column">
-        <form class="login-box column align-self-top" @submit.prevent="login()">
-          <div class="column log-in-form">
+        <div class="login-box column align-self-top">
+          <GoogleOAuthButton
+            v-if="showGoogleOAuth()"
+            button-size="large"
+            class="oauth-reverse"
+          />
+          <form class="column log-in-form" @submit.prevent="login()">
             <label :class="{ error: $v.credentials.email.$error }">
               {{ $t('LOGIN.EMAIL.LABEL') }}
               <input
@@ -66,9 +71,9 @@
               :loading="loginApi.showLoading"
               button-class="large expanded"
             />
-          </div>
-        </form>
-        <div class="column text-center sigin__footer">
+          </form>
+        </div>
+        <div class="text-center column sigin__footer">
           <p v-if="!globalConfig.disableUserProfileUpdate">
             <router-link to="auth/reset/password">
               {{ $t('LOGIN.FORGOT_PASSWORD') }}
@@ -82,19 +87,27 @@
         </div>
       </div>
       <woot-spinner v-else size="" />
-    </div>
-  </div>
+    </section>
+  </main>
 </template>
 
 <script>
 import { required, email } from 'vuelidate/lib/validators';
 import globalConfigMixin from 'shared/mixins/globalConfigMixin';
-import WootSubmitButton from '../../components/buttons/FormSubmitButton';
+import WootSubmitButton from 'components/buttons/FormSubmitButton';
 import { mapGetters } from 'vuex';
+import { parseBoolean } from '@chatwoot/utils';
+import GoogleOAuthButton from '../../components/ui/Auth/GoogleOAuthButton.vue';
+
+const ERROR_MESSAGES = {
+  'no-account-found': 'LOGIN.OAUTH.NO_ACCOUNT_FOUND',
+  'business-account-only': 'LOGIN.OAUTH.BUSINESS_ACCOUNTS_ONLY',
+};
 
 export default {
   components: {
     WootSubmitButton,
+    GoogleOAuthButton,
   },
   mixins: [globalConfigMixin],
   props: {
@@ -103,6 +116,7 @@ export default {
     ssoConversationId: { type: String, default: '' },
     config: { type: String, default: '' },
     email: { type: String, default: '' },
+    authError: { type: String, default: '' },
   },
   data() {
     return {
@@ -139,6 +153,16 @@ export default {
     if (this.ssoAuthToken) {
       this.login();
     }
+    if (this.authError) {
+      const message = ERROR_MESSAGES[this.authError] ?? 'LOGIN.API.UNAUTH';
+      this.showAlert(this.$t(message));
+      // wait for idle state
+      window.requestIdleCallback(() => {
+        // Remove the error query param from the url
+        const { query } = this.$route;
+        this.$router.replace({ query: { ...query, error: undefined } });
+      });
+    }
   },
   methods: {
     showAlert(message) {
@@ -148,7 +172,10 @@ export default {
       bus.$emit('newToastMessage', this.loginApi.message);
     },
     showSignupLink() {
-      return window.chatwootConfig.signupEnabled === 'true';
+      return parseBoolean(window.chatwootConfig.signupEnabled);
+    },
+    showGoogleOAuth() {
+      return Boolean(window.chatwootConfig.googleOAuthClientId);
     },
     login() {
       this.loginApi.showLoading = true;
@@ -193,7 +220,12 @@ export default {
   },
 };
 </script>
-<style>
+
+<style lang="scss" scoped>
+.oauth-reverse {
+  display: flex;
+  flex-direction: column-reverse;
+}
 .password-row {
   width: 100%;
   display: flex;
